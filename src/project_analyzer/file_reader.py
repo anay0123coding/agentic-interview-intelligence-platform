@@ -33,8 +33,8 @@ ALLOWED_EXTENSIONS = {
     ".md"
 }
 
-MAX_FILE_SIZE = 50_000
-MAX_TOTAL_SIZE = 300_000
+MAX_FILE_SIZE = 20_000
+MAX_TOTAL_SIZE = 60_000
 
 
 def read_project_files(project_path):
