@@ -33,15 +33,15 @@ ALLOWED_EXTENSIONS = {
     ".md"
 }
 
-MAX_FILE_SIZE = 20_000
-MAX_TOTAL_SIZE = 60_000
+MAX_FILE_CHARS = 8_000
+MAX_TOTAL_CHARS = 25_000
 
 
 def read_project_files(project_path):
     project_path = Path(project_path)
 
     files_content = {}
-    total_size = 0
+    total_chars = 0
 
     for file_path in project_path.rglob("*"):
 
@@ -58,24 +58,25 @@ def read_project_files(project_path):
             continue
 
         try:
-            if file_path.stat().st_size > MAX_FILE_SIZE:
-                continue
-
             content = file_path.read_text(
                 encoding="utf-8",
                 errors="ignore"
             )
 
-            content_size = len(content)
+            content = content[:MAX_FILE_CHARS]
 
-            if total_size + content_size > MAX_TOTAL_SIZE:
+            remaining_chars = MAX_TOTAL_CHARS - total_chars
+
+            if remaining_chars <= 0:
                 break
+
+            content = content[:remaining_chars]
 
             relative_path = file_path.relative_to(project_path)
 
             files_content[str(relative_path)] = content
 
-            total_size += content_size
+            total_chars += len(content)
 
         except Exception:
             continue
